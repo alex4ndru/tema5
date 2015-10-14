@@ -1,0 +1,134 @@
+$address = "http://localhost/bitacad/sedinta_05/server/";
+$request = "api";
+$fieldHidden = 'hidden';
+
+$imgListContentHidden = 'hidden';
+$imgListContent = '';
+
+if(isset($_POST['type']))
+{
+    if($_POST['id'] && $_POST['type'] != '')
+    {
+        $request = "api/{$_POST['type']}/{$_POST['id']}";
+        
+        $apiRequest = $address.$request;
+        $response = file_get_contents($apiRequest);
+        $data = json_decode($response);
+        //var_dump($data->name);
+        
+        if(isset($data->name))
+        {
+            $imgListContentHidden = '';
+            $t = file_get_contents("https://www.google.ro/search?q={$data->name}&source=lnms&tbm=isch");
+            $dom = new DOMDocument;
+            @$dom->loadHTML($t);
+            $finder = new DomXPath($dom);
+            $nodes = $finder->query("//img[@src]");
+
+            for($i=0;$i<$nodes->length; $i++)
+            {
+                $src = $nodes->item($i)->getAttribute("src");
+                $imgListContent .= "<a class='idImg' href='{$src}' target='_blank'><img src='{$src}' /></a>";
+            }
+            $imgListContent .= "<div class='myClear'></div>";
+        }
+        
+    }
+    else
+    {
+        $request = "api/{$_POST['type']}";
+        
+        $apiRequest = $address.$request;
+        $response = file_get_contents($apiRequest);
+        $data = json_decode($response);
+        //var_dump($data->name);
+    }
+    
+    if($_POST['type'] == 'all')
+    {
+        $fieldHidden = 'hidden';
+    }
+    else
+    {
+        $fieldHidden = '';
+    }
+    //var_dump($_POST);
+}
+ else
+{
+    $apiRequest = $address.$request;
+    $response = file_get_contents($apiRequest);
+    $data = json_decode($response);
+}
+
+function doItIfArray($x)
+{
+    if( is_array($x) || is_object($x) )
+    {
+        $pair = 0;
+        foreach ($x as $k => $v)
+        {
+            if( !(is_array($v) || is_object($v)))
+            {
+                $style = 'width:100;';
+                if($pair == 0)
+                {
+                    $style = "style='width:100;float:left;clear:left'";
+                    $pair = 1;
+                }
+                else $pair = 0;
+                //echo"<hr />";
+                //var_dump($v);
+                echo "
+                <div $style>$v</div>
+                ";                
+            }
+            doItIfArray($v);
+        }
+    }
+}
+
+/*
+foreach ($data as $k => $v)
+{
+    var_dump($v);
+    echo"<hr />";
+}
+*/
+//var_dump($t);
+
+$types = ['mammals', 'birds', 'lizards'];
+?>
+<link rel="stylesheet" type="text/css" href="css.css">
+
+<div class="help">API request<br /><?php echo $apiRequest ?></div>
+<div class="main">
+    <form action="client.php" method="POST">
+        <div class="left select">
+            <select name="type">
+                <option value="all">All</option>
+                <?php
+                foreach($types as $v)
+                {
+                    $selected = '';
+                    if(isset($_POST['type']))
+                    {
+                        if($v == $_POST['type']) $selected = 'selected';
+                    }
+                    echo "<option {$selected} value='{$v}'>{$v}</option>";
+                }
+                ?>
+            </select>
+        </div>
+        <div class="middle select" <?php echo $fieldHidden ?>>
+            <input type="text" name="id" placeholder="enter id" />
+        </div>
+        
+        <div class="right select">
+            <input type="submit" value="Search" />
+        </div>
+    </form>
+    <div class="results"><?php doItIfArray($data) ?></div>
+    <div class="results extra" <?php echo $imgListContentHidden ?> ><?php echo $imgListContent ?></div>
+    <div class="myClear"></div>
+</div>

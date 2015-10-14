@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<db>
+    <mammals>
+        <mamal>
+            <id>100</id>
+            <name>rabbit</name>
+        </mamal>
+        <mamal>
+            <id>200</id>
+            <name>bear</name>
+        </mamal>
+        <mamal>
+            <id>300</id>
+            <name>gopher</name>
+        </mamal>
+    </mammals>
+    
+    <birds>
+        <bird>
+            <id>100</id>
+            <name>shoebill</name>
+        </bird>
+        <bird>
+            <id>200</id>
+            <name>hummingbird</name>
+        </bird>
+        <bird>
+            <id>300</id>
+            <name>penguin</name>
+        </bird>
+    </birds>
+    
+    <lizards>
+        <lizard>
+            <id>100</id>
+            <name>chameleon</name>
+        </lizard>
+        <lizard>
+            <id>200</id>
+            <name>thornydevil</name>
+        </lizard>
+        <lizard>
+            <id>300</id>
+            <name>gila</name>
+        </lizard>
+    </lizards>
+</db>

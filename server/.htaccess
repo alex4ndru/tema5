@@ -1,0 +1,6 @@
+RewriteEngine On
+RewriteRule ^api/([^\.]+)/([^\.]+) index.php?api=1&type=$1&id=$2
+RewriteRule ^api/([^\.]+)/ index.php?api=1&type=$1
+RewriteRule ^api/([^\.]+) index.php?api=1&type=$1
+RewriteRule ^api/$ index.php?api=1&type=name
+RewriteRule ^api$ index.php?api=1&type=name

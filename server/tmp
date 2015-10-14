@@ -1,0 +1,8 @@
+RewriteEngine On
+RewriteRule ^api$ index.php
+RewriteRule ^api/$ index.php
+RewriteRule ^api/$ index.php
+RewriteRule ^api/([A-Za-z0-9-]+)/?$ index.php
+RewriteRule ^api/([A-Za-z0-9-]+)/([A-Za-z0-9-]+)/?$ index.php
+
+
